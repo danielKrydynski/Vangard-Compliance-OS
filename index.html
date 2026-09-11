@@ -1,0 +1,2298 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Search &amp; Unemployment Compliance Companion</title>
+    <meta name="description" content="A modern cyber-chic dashboard to track job search activities, guarantee weekly unemployment compliance, craft behavioral interview answers, and screen agency recruiters." />
+    <meta property="og:title" content="Job Search &amp; Unemployment Compliance Companion" />
+    <meta property="og:description" content="A modern cyber-chic dashboard to track job search activities, guarantee weekly unemployment compliance, craft behavioral interview answers, and screen agency recruiters." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              obsidian: {
+                950: '#060911',
+                900: '#090E17',
+                850: '#0D1424',
+                800: '#131D31',
+                750: '#19253E',
+                700: '#1E2D4A',
+              },
+              cyan: {
+                brand: '#06B6D4',
+                glow: '#22D3EE',
+              },
+              indigo: {
+                brand: '#6366F1',
+                glow: '#818CF8',
+              },
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+              mono: ['JetBrains Mono', 'Fira Code', 'Courier New', 'monospace'],
+            },
+            boxShadow: {
+              'cyber-cyan': '0 0 20px -5px rgba(6, 182, 212, 0.35)',
+              'cyber-indigo': '0 0 20px -5px rgba(99, 102, 241, 0.35)',
+              'cyber-emerald': '0 0 20px -5px rgba(16, 185, 129, 0.35)',
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #090E17;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1E2D4A;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #06B6D4;
+      }
+
+      /* Cyber grid subtle background */
+      .cyber-grid-bg {
+        background-color: #060911;
+        background-image: 
+          radial-gradient(ellipse 80% 50% at 50% -20%, rgba(6, 182, 212, 0.12), transparent 70%),
+          radial-gradient(ellipse 60% 40% at 85% 10%, rgba(99, 102, 241, 0.1), transparent 60%),
+          linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+      }
+
+      /* Animated pulse subtle badge */
+      @keyframes radar-pulse {
+        0% { transform: scale(0.95); opacity: 0.8; }
+        50% { transform: scale(1.05); opacity: 1; }
+        100% { transform: scale(0.95); opacity: 0.8; }
+      }
+      .radar-active {
+        animation: radar-pulse 3s infinite ease-in-out;
+      }
+    </style>
+  </head>
+  <body class="cyber-grid-bg text-slate-100 min-h-screen antialiased flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
+    
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-30 border-b border-slate-800/80 bg-obsidian-950/85 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-indigo-600/30 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shadow-cyber-cyan">
+            <i data-lucide="shield-check" class="w-5 h-5 text-cyan-400"></i>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="font-bold text-base sm:text-lg tracking-tight text-white flex items-center gap-1.5">
+                Vanguard <span class="text-cyan-400 font-mono text-xs uppercase px-1.5 py-0.5 rounded bg-cyan-950/80 border border-cyan-500/30">Compliance OS</span>
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 hidden sm:block">Job Search &amp; Unemployment Audit Companion</p>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="flex items-center space-x-1 sm:space-x-2 bg-obsidian-900/90 p-1 rounded-xl border border-slate-800 text-sm">
+          <button id="tabBtnActivities" onclick="switchMainTab('activities')" class="tab-btn px-3 py-1.5 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+            <i data-lucide="layout-grid" class="w-4 h-4"></i>
+            <span>Log &amp; Compliance</span>
+          </button>
+          <button id="tabBtnInterview" onclick="switchMainTab('interview')" class="tab-btn px-3 py-1.5 rounded-lg font-medium text-xs sm:text-sm text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Interview Builder</span>
+          </button>
+          <button id="tabBtnScreener" onclick="switchMainTab('screener')" class="tab-btn px-3 py-1.5 rounded-lg font-medium text-xs sm:text-sm text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition flex items-center gap-1.5">
+            <i data-lucide="shield-alert" class="w-4 h-4"></i>
+            <span>Recruiter Screener</span>
+          </button>
+        </nav>
+
+        <!-- Header Actions -->
+        <div class="flex items-center space-x-2">
+          <button onclick="openExportModal()" title="Export Compliance Report" class="p-2 sm:px-3 sm:py-1.5 text-xs rounded-lg font-medium bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-200 flex items-center gap-1.5 transition hover:border-cyan-500/40">
+            <i data-lucide="file-down" class="w-4 h-4 text-cyan-400"></i>
+            <span class="hidden md:inline">Export Audit</span>
+          </button>
+          <button onclick="openSettingsModal()" title="Settings & Goal Configuration" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/70 border border-transparent hover:border-slate-700 transition">
+            <i data-lucide="settings" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+      <!-- SECTION 1: ACTIVITIES & COMPLIANCE VIEW -->
+      <div id="viewActivities" class="space-y-6">
+        
+        <!-- Top Status & Compliance Engine Hero Strip -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          
+          <!-- Card 1: Weekly Progress Gauge & Goal -->
+          <div class="lg:col-span-2 bg-obsidian-900/90 border border-slate-800 rounded-2xl p-5 relative overflow-hidden backdrop-blur-sm shadow-lg">
+            <div class="absolute -top-16 -right-16 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800/70">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-cyan-950/80 text-cyan-300 border border-cyan-500/30">
+                    <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+                    Current Sunday–Saturday Cycle
+                  </span>
+                  <span id="cycleDaysLeft" class="text-xs text-slate-400 font-mono">2 days left</span>
+                </div>
+                <h2 id="currentWeekRangeText" class="text-lg sm:text-xl font-bold text-white mt-1">Sun, Sep 6 – Sat, Sep 12, 2026</h2>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="openActivityModal()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white text-xs sm:text-sm font-semibold shadow-cyber-cyan transition flex items-center gap-1.5">
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                  <span>Log Activity</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Gauge Metrics Row -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-5 items-center">
+              
+              <!-- Circular/Progress Gauge -->
+              <div class="flex items-center space-x-4">
+                <div class="relative w-20 h-20 flex-shrink-0">
+                  <svg class="w-20 h-20 transform -rotate-90" viewBox="0 0 36 36">
+                    <path class="text-slate-800" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path id="gaugeCircle" class="text-cyan-400 transition-all duration-700 ease-out" stroke-dasharray="100, 100" stroke-dashoffset="30" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  </svg>
+                  <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                    <span id="gaugePercent" class="text-sm font-bold font-mono text-white">70%</span>
+                  </div>
+                </div>
+                <div>
+                  <div class="text-xs text-slate-400 uppercase tracking-wider font-mono">Compliance Target</div>
+                  <div class="text-xl font-extrabold text-white mt-0.5">
+                    <span id="completedThisWeek" class="text-cyan-400">0</span>
+                    <span class="text-slate-500 text-base font-normal">/</span>
+                    <span id="weeklyGoalDisplay" class="text-slate-300">5</span>
+                    <span class="text-xs font-normal text-slate-400">activities</span>
+                  </div>
+                  <button onclick="promptEditGoal()" class="text-[11px] text-cyan-400 hover:text-cyan-300 underline font-mono flex items-center gap-1 mt-0.5">
+                    Change goal (<span id="btnGoalVal">5</span>/wk)
+                  </button>
+                </div>
+              </div>
+
+              <!-- Compliance Status Verdict -->
+              <div class="bg-obsidian-950/70 border border-slate-800/80 rounded-xl p-3.5 flex flex-col justify-center">
+                <span class="text-xs text-slate-400 font-mono">State Audit Status</span>
+                <div id="complianceBadgeContainer" class="mt-1 flex items-center gap-1.5">
+                  <!-- Filled via JS: Compliant / In Progress -->
+                </div>
+                <p id="complianceHint" class="text-[11px] text-slate-400 mt-1 leading-snug">Need 2 more documented searches before Saturday midnight.</p>
+              </div>
+
+              <!-- Fast Compliance Export Shortcut -->
+              <div class="bg-obsidian-950/70 border border-slate-800/80 rounded-xl p-3.5 flex flex-col justify-between">
+                <div>
+                  <span class="text-xs text-slate-400 font-mono">Quick Filing Export</span>
+                  <p class="text-xs text-slate-300 mt-1">Export week's search log for state UI portal.</p>
+                </div>
+                <div class="flex gap-2 mt-2">
+                  <button onclick="copyCurrentWeekMarkdown()" class="w-full py-1.5 px-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-lg text-xs font-medium text-cyan-300 hover:text-white transition flex items-center justify-center gap-1">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                    <span>Copy MD</span>
+                  </button>
+                  <button onclick="downloadCurrentWeekCSV()" class="w-full py-1.5 px-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-lg text-xs font-medium text-indigo-300 hover:text-white transition flex items-center justify-center gap-1">
+                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                    <span>CSV</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Card 2: 4-Week Audit History Ledger -->
+          <div class="bg-obsidian-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between backdrop-blur-sm shadow-lg">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800/70">
+              <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                <i data-lucide="history" class="w-4 h-4 text-indigo-400"></i>
+                <span>Previous Weeks Compliance</span>
+              </h3>
+              <span class="text-xs text-slate-500 font-mono">Audit Record</span>
+            </div>
+            
+            <div id="pastWeeksList" class="space-y-2.5 my-3">
+              <!-- Dynamically rendered list of 4 past weeks -->
+            </div>
+
+            <div class="pt-2 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400 font-mono">
+              <span>Standard Sun–Sat audit cycles</span>
+              <button onclick="openExportModal()" class="text-cyan-400 hover:underline">Full Log</button>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- SECTION 2: APPLICATION & ACTIVITY LOG TABLE / CARDS -->
+        <section class="bg-obsidian-900/90 border border-slate-800 rounded-2xl p-5 shadow-lg space-y-4">
+          
+          <!-- Controls bar: Search, Filters, View toggle -->
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div class="flex flex-1 items-center gap-3">
+              <!-- Search Bar -->
+              <div class="relative flex-1 max-w-md">
+                <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"></i>
+                <input 
+                  type="text" 
+                  id="searchInput" 
+                  oninput="handleSearchFilterChange()"
+                  placeholder="Search company, role, recruiter, notes..." 
+                  class="w-full bg-obsidian-950/80 border border-slate-700/80 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 rounded-xl pl-9 pr-4 py-2 text-xs sm:text-sm text-slate-200 placeholder-slate-500 outline-none transition"
+                />
+              </div>
+
+              <!-- Compliance Only Filter -->
+              <div class="flex items-center gap-1.5 bg-obsidian-950/80 border border-slate-700/80 px-3 py-2 rounded-xl text-xs">
+                <input 
+                  type="checkbox" 
+                  id="filterComplianceOnly" 
+                  onchange="handleSearchFilterChange()"
+                  class="rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-cyan-500 h-4 w-4 cursor-pointer"
+                />
+                <label for="filterComplianceOnly" class="text-slate-300 font-medium cursor-pointer whitespace-nowrap">
+                  Compliance Only
+                </label>
+              </div>
+            </div>
+
+            <!-- Right Filters: Status & View Toggle -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <!-- Status Filter Dropdown -->
+              <select 
+                id="filterStatus" 
+                onchange="handleSearchFilterChange()"
+                class="bg-obsidian-950/80 border border-slate-700/80 text-slate-300 text-xs sm:text-sm rounded-xl px-3 py-2 outline-none focus:border-cyan-500 cursor-pointer"
+              >
+                <option value="ALL">All Statuses</option>
+                <option value="Applied">Applied</option>
+                <option value="Interviewing">Interviewing</option>
+                <option value="Offered">Offered</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Ghosted">Ghosted</option>
+              </select>
+
+              <!-- Week Timeframe Filter -->
+              <select 
+                id="filterTimeframe" 
+                onchange="handleSearchFilterChange()"
+                class="bg-obsidian-950/80 border border-slate-700/80 text-slate-300 text-xs sm:text-sm rounded-xl px-3 py-2 outline-none focus:border-cyan-500 cursor-pointer"
+              >
+                <option value="ALL">All Time</option>
+                <option value="CURRENT_WEEK" selected>Current Week Only</option>
+                <option value="LAST_WEEK">Previous Week</option>
+              </select>
+
+              <!-- View Mode Toggle -->
+              <div class="flex items-center bg-obsidian-950/80 border border-slate-700/80 rounded-xl p-0.5">
+                <button id="viewModeTableBtn" onclick="setViewMode('table')" class="p-1.5 rounded-lg text-cyan-400 bg-slate-800/80" title="Table View">
+                  <i data-lucide="table" class="w-4 h-4"></i>
+                </button>
+                <button id="viewModeGridBtn" onclick="setViewMode('grid')" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-200" title="Grid View">
+                  <i data-lucide="grid" class="w-4 h-4"></i>
+                </button>
+              </div>
+
+              <!-- Quick Add Button -->
+              <button onclick="openActivityModal()" class="px-3 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs sm:text-sm font-medium flex items-center gap-1.5 transition">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>Add Entry</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Entries Container (Table or Grid) -->
+          <div id="activitiesContainer" class="min-h-[260px]">
+            <!-- Injected via JavaScript -->
+          </div>
+
+          <!-- Pagination / Stats footer -->
+          <div class="flex items-center justify-between text-xs text-slate-400 pt-3 border-t border-slate-800">
+            <span id="showingCountText">Showing 0 entries</span>
+            <div class="flex items-center gap-2">
+              <span class="inline-block w-2 h-2 rounded-full bg-cyan-400"></span>
+              <span>All changes automatically saved to LocalStorage</span>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- SECTION 2: BEHAVIORAL INTERVIEW BUILDER -->
+      <div id="viewInterview" class="space-y-6 hidden">
+        
+        <div class="bg-obsidian-900/90 border border-slate-800 rounded-2xl p-6 shadow-lg">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-indigo-950/80 text-indigo-300 border border-indigo-500/30">
+                  Engineering Communication Protocol
+                </span>
+              </div>
+              <h2 class="text-xl font-bold text-white mt-1">High-Impact Behavioral Answer Studio</h2>
+              <p class="text-xs text-slate-400 mt-1 max-w-2xl">
+                Ditch the robotic STAR method. Craft punchy, memorable behavioral narratives using the proven
+                <strong class="text-cyan-400 font-mono">Origin + Methodology + Result</strong> formula.
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="clearBehavioralForm()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-800 rounded-lg hover:border-slate-700 transition">
+                Clear Fields
+              </button>
+              <button onclick="loadSampleBehavioral()" class="px-3 py-1.5 text-xs text-indigo-300 hover:text-indigo-200 bg-indigo-950/50 border border-indigo-700/50 rounded-lg hover:bg-indigo-900/40 transition">
+                Load Example
+              </button>
+            </div>
+          </div>
+
+          <!-- Formula Studio Layout -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-6">
+            
+            <!-- Left 3 Formula Input Columns -->
+            <div class="lg:col-span-7 space-y-4">
+              
+              <!-- Topic / Question Label -->
+              <div>
+                <label class="block text-xs font-mono text-slate-300 mb-1">
+                  Interview Question / Target Competency
+                </label>
+                <input 
+                  type="text" 
+                  id="behavioralTitle" 
+                  oninput="updateBehavioralPreview()"
+                  placeholder="e.g., Tell me about a critical production outage you resolved" 
+                  class="w-full bg-obsidian-950/80 border border-slate-700/80 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-xl px-3.5 py-2 text-sm text-slate-100 placeholder-slate-500 outline-none"
+                />
+              </div>
+
+              <!-- Step 1: Origin -->
+              <div class="bg-obsidian-950/60 border border-slate-800 rounded-xl p-4 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-mono uppercase tracking-wider font-semibold text-cyan-400 flex items-center gap-1.5">
+                    <span class="w-5 h-5 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-[10px] text-cyan-300">1</span>
+                    Origin (The Context &amp; Catalyst)
+                  </span>
+                  <span id="countOrigin" class="text-[11px] font-mono text-slate-500">0 words · 0 chars</span>
+                </div>
+                <p class="text-[11px] text-slate-400">
+                  The spark, constraint, or high-stakes problem you were handed. Avoid long windups—set the stakes in 1–2 sentences.
+                </p>
+                <textarea 
+                  id="inputOrigin" 
+                  rows="3" 
+                  oninput="updateBehavioralPreview()"
+                  placeholder="When our payment processing microservice experienced intermittent 504 timeouts under peak Black Friday load..."
+                  class="w-full bg-obsidian-900/90 border border-slate-700/80 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 rounded-lg p-3 text-xs sm:text-sm text-slate-100 placeholder-slate-600 outline-none resize-none transition"
+                ></textarea>
+              </div>
+
+              <!-- Step 2: Methodology -->
+              <div class="bg-obsidian-950/60 border border-slate-800 rounded-xl p-4 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-mono uppercase tracking-wider font-semibold text-indigo-400 flex items-center gap-1.5">
+                    <span class="w-5 h-5 rounded-full bg-indigo-950 border border-indigo-500/40 flex items-center justify-center text-[10px] text-indigo-300">2</span>
+                    Methodology (Your Systematic Technical Action)
+                  </span>
+                  <span id="countMethodology" class="text-[11px] font-mono text-slate-500">0 words · 0 chars</span>
+                </div>
+                <p class="text-[11px] text-slate-400">
+                  What you personally investigated, architected, or executed. Mention exact tools, design patterns, or leadership interventions.
+                </p>
+                <textarea 
+                  id="inputMethodology" 
+                  rows="3" 
+                  oninput="updateBehavioralPreview()"
+                  placeholder="I instrumented distributed tracing via OpenTelemetry to isolate database connection pool exhaustion, then architected an asynchronous Redis idempotency buffer with circuit-breaking fallbacks..."
+                  class="w-full bg-obsidian-900/90 border border-slate-700/80 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-lg p-3 text-xs sm:text-sm text-slate-100 placeholder-slate-600 outline-none resize-none transition"
+                ></textarea>
+              </div>
+
+              <!-- Step 3: Result -->
+              <div class="bg-obsidian-950/60 border border-slate-800 rounded-xl p-4 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-mono uppercase tracking-wider font-semibold text-emerald-400 flex items-center gap-1.5">
+                    <span class="w-5 h-5 rounded-full bg-emerald-950 border border-emerald-500/40 flex items-center justify-center text-[10px] text-emerald-300">3</span>
+                    Result (Measurable Impact &amp; Long-Term Value)
+                  </span>
+                  <span id="countResult" class="text-[11px] font-mono text-slate-500">0 words · 0 chars</span>
+                </div>
+                <p class="text-[11px] text-slate-400">
+                  Quantifiable outcomes (latency % reduction, $ saved, uptime, team velocity) and lasting systemic impact.
+                </p>
+                <textarea 
+                  id="inputResult" 
+                  rows="3" 
+                  oninput="updateBehavioralPreview()"
+                  placeholder="...reducing checkout latency by 42%, completely eliminating 504 errors, and protecting an estimated $1.2M in peak holiday transactional volume."
+                  class="w-full bg-obsidian-900/90 border border-slate-700/80 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg p-3 text-xs sm:text-sm text-slate-100 placeholder-slate-600 outline-none resize-none transition"
+                ></textarea>
+              </div>
+
+            </div>
+
+            <!-- Right Column: Live Unified Preview Card & Answer Bank -->
+            <div class="lg:col-span-5 space-y-5 flex flex-col justify-between">
+              
+              <!-- Unified Preview Card -->
+              <div class="bg-gradient-to-br from-obsidian-950 to-obsidian-900 border border-slate-700/80 rounded-xl p-5 shadow-cyber-indigo relative">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                    <span class="text-xs font-mono font-semibold uppercase tracking-wider text-slate-200">Unified Behavioral Narrative</span>
+                  </div>
+                  <span id="totalWordCount" class="text-xs font-mono text-slate-400">0 words</span>
+                </div>
+
+                <div class="mt-4 min-h-[140px] text-sm leading-relaxed text-slate-200 space-y-3">
+                  <div id="previewEmptyState" class="text-center py-8 text-slate-500 text-xs">
+                    <i data-lucide="pen-tool" class="w-8 h-8 mx-auto text-slate-600 mb-2"></i>
+                    Start typing your Origin, Methodology, and Result on the left to see your cohesive high-impact statement materialize in real-time.
+                  </div>
+                  <div id="previewContent" class="hidden">
+                    <p class="text-slate-100 font-sans">
+                      <span id="previewOrigin" class="text-cyan-300 font-medium"></span>
+                      <span id="previewMethodology" class="text-indigo-200"></span>
+                      <span id="previewResult" class="text-emerald-300 font-medium"></span>
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Preview Actions -->
+                <div class="pt-4 border-t border-slate-800 flex items-center justify-between gap-2">
+                  <button onclick="copyBehavioralPreview()" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition">
+                    <i data-lucide="copy" class="w-3.5 h-3.5 text-cyan-400"></i>
+                    <span>Copy Statement</span>
+                  </button>
+                  <button onclick="saveBehavioralAnswer()" class="px-3.5 py-1.5 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white rounded-lg text-xs font-semibold shadow transition flex items-center gap-1.5">
+                    <i data-lucide="bookmark-plus" class="w-3.5 h-3.5"></i>
+                    <span>Save to Answer Bank</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Answer Bank Drawer / List -->
+              <div class="bg-obsidian-950/80 border border-slate-800 rounded-xl p-4 space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="layers" class="w-4 h-4 text-cyan-400"></i>
+                    <h3 class="text-sm font-semibold text-slate-200">Your Answer Bank</h3>
+                  </div>
+                  <span id="answerBankCount" class="text-xs font-mono text-slate-400">0 answers</span>
+                </div>
+                
+                <div id="answerBankContainer" class="max-h-72 overflow-y-auto space-y-2 pr-1">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- SECTION 3: RECRUITER SCREENER / RED FLAG CHECKLIST -->
+      <div id="viewScreener" class="space-y-6 hidden">
+        
+        <div class="bg-obsidian-900/90 border border-slate-800 rounded-2xl p-6 shadow-lg">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-medium bg-amber-950/80 text-amber-300 border border-amber-500/30">
+                  Agency Defense System
+                </span>
+              </div>
+              <h2 class="text-xl font-bold text-white mt-1">Agency Recruiter Screener &amp; Red Flag Evaluator</h2>
+              <p class="text-xs text-slate-400 mt-1 max-w-2xl">
+                Quickly audit incoming LinkedIn InMails, agency recruiter messages, and contract solicitations before giving away personal information or doing free work.
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="resetScreenerChecklist()" class="px-3 py-1.5 text-xs text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-800 rounded-lg hover:border-slate-700 transition">
+                Reset Screener
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-6">
+            
+            <!-- Screener Checklist Items -->
+            <div class="lg:col-span-8 space-y-4">
+              
+              <!-- Lead Identification Metadata -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-obsidian-950/60 border border-slate-800/80 p-3.5 rounded-xl">
+                <div>
+                  <label class="block text-[11px] font-mono text-slate-400 mb-1">Recruiter Name / Agency</label>
+                  <input 
+                    type="text" 
+                    id="screenerAgencyName" 
+                    placeholder="e.g., Apex Tech Solutions / John Doe" 
+                    class="w-full bg-obsidian-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 outline-none focus:border-cyan-500"
+                  />
+                </div>
+                <div>
+                  <label class="block text-[11px] font-mono text-slate-400 mb-1">Pitch Channel / Source</label>
+                  <input 
+                    type="text" 
+                    id="screenerChannel" 
+                    placeholder="e.g., LinkedIn InMail, Cold Email, Indeed" 
+                    class="w-full bg-obsidian-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 outline-none focus:border-cyan-500"
+                  />
+                </div>
+              </div>
+
+              <!-- Criteria checklist list -->
+              <div class="space-y-3" id="screenerCriteriaList">
+                <!-- Injected checklist items with weights -->
+              </div>
+
+              <!-- Notes Area -->
+              <div class="bg-obsidian-950/60 border border-slate-800/80 p-3.5 rounded-xl space-y-1.5">
+                <label class="block text-xs font-mono text-slate-300">Observation Notes / Red Flags Discovered</label>
+                <textarea 
+                  id="screenerNotes" 
+                  rows="2" 
+                  placeholder="e.g., Won't share client name until I sign a right to represent (RTR); email domain registered 2 weeks ago..."
+                  class="w-full bg-obsidian-900 border border-slate-700 rounded-lg p-2.5 text-xs text-slate-200 outline-none focus:border-cyan-500 resize-none"
+                ></textarea>
+              </div>
+
+            </div>
+
+            <!-- Screener Result & Recommendation Gauge -->
+            <div class="lg:col-span-4 space-y-4">
+              
+              <div class="bg-obsidian-950 border border-slate-800 rounded-xl p-5 shadow-cyber-cyan space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                  <span class="text-xs font-mono uppercase text-slate-400">Opportunity Health Index</span>
+                  <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i>
+                </div>
+
+                <!-- Big Trust Score Meter -->
+                <div class="text-center py-3">
+                  <div id="screenerScoreText" class="text-4xl font-extrabold font-mono text-cyan-400">100%</div>
+                  <div id="screenerScoreLabel" class="text-xs font-mono uppercase tracking-wider text-slate-400 mt-1">
+                    Direct High-Quality Lead
+                  </div>
+                </div>
+
+                <!-- Risk Badge -->
+                <div id="screenerVerdictBadge" class="px-3 py-2 rounded-xl text-xs font-medium text-center bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+                  Proceed Confidently
+                </div>
+
+                <!-- Action Guidelines based on score -->
+                <div class="text-xs text-slate-400 space-y-2 pt-2 border-t border-slate-800/70">
+                  <div class="font-mono text-[11px] text-slate-300 uppercase">Recommended Protocol:</div>
+                  <p id="screenerAdviceText" class="leading-relaxed">
+                    Legitimate direct opportunity or reputable agency. Request the official job requisition number, verify hiring manager identity on LinkedIn, and confirm base pay range in writing.
+                  </p>
+                </div>
+
+                <div class="pt-2">
+                  <button onclick="saveScreenerEvaluation()" class="w-full py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+                    <i data-lucide="save" class="w-3.5 h-3.5 text-cyan-400"></i>
+                    <span>Log Assessment to History</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Past Screened Leads Quick Log -->
+              <div class="bg-obsidian-950/80 border border-slate-800 rounded-xl p-4 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-semibold text-slate-300">Screened Inquiries</span>
+                  <span id="screenedCount" class="text-xs font-mono text-slate-500">0 logged</span>
+                </div>
+                <div id="screenedHistoryList" class="space-y-2 max-h-48 overflow-y-auto pr-1 text-xs">
+                  <!-- Rendered via JS -->
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto border-t border-slate-800/80 bg-obsidian-950/90 py-4">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+        <div class="flex items-center gap-2">
+          <i data-lucide="terminal" class="w-4 h-4 text-cyan-500"></i>
+          <span>Vanguard Compliance Engine v2.4 · Client-Side LocalStorage Encrypted Runtime</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button onclick="openExportModal()" class="hover:text-cyan-400 transition">Export Unemployment Audit</button>
+          <span>·</span>
+          <button onclick="openSettingsModal()" class="hover:text-cyan-400 transition">Compliance Goals</button>
+          <span>·</span>
+          <button onclick="restoreSampleDataPrompt()" class="hover:text-amber-400 transition">Reset Demo Data</button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- MODAL: ADD / EDIT ACTIVITY -->
+    <div id="activityModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm hidden">
+      <div class="bg-obsidian-900 border border-slate-700/80 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <div class="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+              <i data-lucide="briefcase" class="w-4 h-4"></i>
+            </div>
+            <h3 id="modalActivityTitle" class="text-base font-bold text-white">Log Job Search Activity</h3>
+          </div>
+          <button onclick="closeActivityModal()" class="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <form id="activityForm" onsubmit="handleActivitySubmit(event)" class="space-y-4 text-xs sm:text-sm">
+          <input type="hidden" id="activityEditId" value="" />
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block font-medium text-slate-300 mb-1">
+                Date of Activity <span class="text-rose-400">*</span>
+              </label>
+              <input 
+                type="date" 
+                id="formDate" 
+                required 
+                class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 outline-none focus:border-cyan-500"
+              />
+              <span id="formDateError" class="text-[11px] text-rose-400 hidden mt-0.5">Date cannot be in the future.</span>
+            </div>
+
+            <div>
+              <label class="block font-medium text-slate-300 mb-1">
+                Application Method <span class="text-rose-400">*</span>
+              </label>
+              <select 
+                id="formMethod" 
+                required 
+                class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 outline-none focus:border-cyan-500"
+              >
+                <option value="Direct Company Portal">Direct Company Portal</option>
+                <option value="LinkedIn / Easy Apply">LinkedIn / Easy Apply</option>
+                <option value="Direct Referral / Network">Direct Referral / Network</option>
+                <option value="Agency / Recruiter Outreach">Agency / Recruiter Outreach</option>
+                <option value="Indeed / Job Board">Indeed / Job Board</option>
+                <option value="Cold Email to Engineering Lead">Cold Email to Engineering Lead</option>
+                <option value="Technical Interview / Screen">Technical Interview / Screen</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block font-medium text-slate-300 mb-1">
+                Company / Organization <span class="text-rose-400">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="formCompany" 
+                placeholder="e.g., Stripe, Datadog" 
+                required 
+                class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 outline-none focus:border-cyan-500"
+              />
+            </div>
+
+            <div>
+              <label class="block font-medium text-slate-300 mb-1">
+                Position Title <span class="text-rose-400">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="formPosition" 
+                placeholder="e.g., Senior Full-Stack Engineer" 
+                required 
+                class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 outline-none focus:border-cyan-500"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block font-medium text-slate-300 mb-1">
+                Location / Work Mode
+              </label>
+              <input 
+                type="text" 
+                id="formLocation" 
+                placeholder="e.g., Remote (US), San Francisco, Hybrid" 
+                class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 outline-none focus:border-cyan-500"
+              />
+            </div>
+
+            <div>
+              <label class="block font-medium text-slate-300 mb-1">
+                Current Status
+              </label>
+              <select 
+                id="formStatus" 
+                class="w-full bg-obsidian-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 outline-none focus:border-cyan-500"
+              >
+                <option value="Applied">Applied</option>
+                <option value="Interviewing">Interviewing</option>
+                <option value="Offered">Offered</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Ghosted">Ghosted</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Compliance Activity Toggle Box -->
+          <div class="bg-obsidian-950/80 border border-cyan-500/30 rounded-xl p-3.5 flex items-start gap-3">
+            <input 
+              type="checkbox" 
+              id="formIsCompliance" 
+              checked 
+              class="mt-1 rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-cyan-500 h-4 w-4 cursor-pointer"
+            />
+            <div class="flex-1">
+              <label for="formIsCompliance" class="font-semibold text-cyan-300 cursor-pointer block">
+                Counts as Unemployment Compliance Activity
+              </label>
+              <p class="text-[11px] text-slate-400 mt-0.5">
+                Meets state unemployment work search criteria (bona fide job application, recruiter communication, or interview).
+              </p>
+            </div>
+          </div>
+
+          <!-- Notes / Proof of Search -->
+          <div>
+            <label class="block font-medium text-slate-300 mb-1">
+              Activity Notes, Requisition # &amp; Follow-up Details
+            </label>
+            <textarea 
+              id="formNotes" 
+              rows="3" 
+              placeholder="e.g., Application confirmation #ST-8812; recruiter reached out on LinkedIn; completed HackerRank screen..." 
+              class="w-full bg-obsidian-950 border border-slate-700 rounded-xl p-3 text-slate-200 outline-none focus:border-cyan-500 resize-none"
+            ></textarea>
+          </div>
+
+          <!-- Modal Actions -->
+          <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+            <button type="button" onclick="closeActivityModal()" class="px-4 py-2 text-slate-400 hover:text-white bg-slate-900 border border-slate-800 rounded-xl font-medium transition">
+              Cancel
+            </button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-semibold shadow-cyber-cyan transition">
+              Save Activity
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL: EXPORT COMPLIANCE REPORT -->
+    <div id="exportModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm hidden">
+      <div class="bg-obsidian-900 border border-slate-700/80 rounded-2xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] flex flex-col">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <div class="p-1.5 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+              <i data-lucide="file-check" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white">Unemployment Audit &amp; Compliance Export</h3>
+              <p class="text-xs text-slate-400">Generate certified job search logs for state unemployment agency audits</p>
+            </div>
+          </div>
+          <button onclick="closeExportModal()" class="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Export Selection Filters -->
+        <div class="flex flex-wrap items-center gap-3 bg-obsidian-950 p-3 rounded-xl border border-slate-800 text-xs">
+          <div>
+            <label class="text-slate-400 block mb-1 font-mono">Week Cycle:</label>
+            <select id="exportWeekSelect" onchange="renderExportPreview()" class="bg-obsidian-900 border border-slate-700 text-slate-200 rounded-lg px-2.5 py-1.5 outline-none">
+              <option value="CURRENT">Current Week</option>
+              <option value="ALL">All Recorded Weeks (Full Log)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1 font-mono">Format Type:</label>
+            <div class="flex items-center gap-1 bg-obsidian-900 p-0.5 rounded-lg border border-slate-700">
+              <button id="exportFormatMDBtn" onclick="setExportFormat('md')" class="px-2.5 py-1 rounded text-cyan-400 bg-slate-800 font-medium">Markdown / Text</button>
+              <button id="exportFormatCSVBtn" onclick="setExportFormat('csv')" class="px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium">CSV Table</button>
+            </div>
+          </div>
+          <div class="ml-auto flex items-end">
+            <span id="exportCountBadge" class="px-2.5 py-1 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/30 font-mono text-[11px]">
+              0 compliance activities
+            </span>
+          </div>
+        </div>
+
+        <!-- Export Code / Preview Area -->
+        <div class="flex-1 min-h-[220px] relative">
+          <textarea 
+            id="exportPreviewText" 
+            readonly 
+            class="w-full h-full min-h-[220px] bg-obsidian-950 border border-slate-800 rounded-xl p-3.5 font-mono text-xs text-slate-300 outline-none select-all resize-none"
+          ></textarea>
+        </div>
+
+        <!-- Modal Footer Actions -->
+        <div class="flex items-center justify-between pt-3 border-t border-slate-800">
+          <span class="text-xs text-slate-500">Ready to paste directly into state certification forms</span>
+          <div class="flex items-center gap-2">
+            <button onclick="copyExportToClipboard()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+              <i data-lucide="copy" class="w-3.5 h-3.5 text-cyan-400"></i>
+              <span>Copy to Clipboard</span>
+            </button>
+            <button onclick="downloadExportFile()" class="px-4 py-2 bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition shadow">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>Download File</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: SETTINGS & COMPLIANCE GOAL -->
+    <div id="settingsModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm hidden">
+      <div class="bg-obsidian-900 border border-slate-700/80 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <i data-lucide="sliders" class="w-4 h-4 text-cyan-400"></i>
+            <h3 class="text-base font-bold text-white">Compliance Settings</h3>
+          </div>
+          <button onclick="closeSettingsModal()" class="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div class="space-y-4 text-xs sm:text-sm">
+          <div>
+            <label class="block font-medium text-slate-200 mb-1">
+              Required Weekly Activities Goal
+            </label>
+            <p class="text-xs text-slate-400 mb-2">
+              Most state unemployment departments mandate between 3 to 5 verifiable contacts per week.
+            </p>
+            <div class="flex items-center gap-3">
+              <input 
+                type="range" 
+                id="goalSlider" 
+                min="1" 
+                max="15" 
+                value="5" 
+                oninput="document.getElementById('goalNumberInput').value = this.value"
+                class="flex-1 accent-cyan-500 cursor-pointer"
+              />
+              <input 
+                type="number" 
+                id="goalNumberInput" 
+                min="1" 
+                max="15" 
+                value="5" 
+                oninput="document.getElementById('goalSlider').value = this.value"
+                class="w-16 bg-obsidian-950 border border-slate-700 rounded-lg px-2.5 py-1 text-center font-mono font-bold text-cyan-400"
+              />
+            </div>
+          </div>
+
+          <div class="p-3 bg-obsidian-950/80 border border-slate-800 rounded-xl space-y-1">
+            <span class="font-mono text-[11px] text-cyan-300">Sunday-to-Saturday Regulatory Engine</span>
+            <p class="text-[11px] text-slate-400 leading-relaxed">
+              In accordance with state unemployment guidelines, weeks run strictly Sunday at 12:00 AM through Saturday at 11:59 PM.
+            </p>
+          </div>
+
+          <!-- Data management -->
+          <div class="pt-2 border-t border-slate-800 space-y-2">
+            <span class="text-xs font-mono text-slate-400 block">Workspace Storage</span>
+            <div class="flex gap-2">
+              <button onclick="restoreSampleDataPrompt()" class="flex-1 py-1.5 px-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 rounded-lg text-xs transition">
+                Reload Sample Data
+              </button>
+              <button onclick="clearAllDataPrompt()" class="flex-1 py-1.5 px-2 bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/60 text-rose-300 rounded-lg text-xs transition">
+                Wipe All Records
+              </button>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-3">
+            <button onclick="saveComplianceSettings()" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl text-xs transition">
+              Save Preferences
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- APPLICATION JAVASCRIPT (SINGLE-FILE RUNTIME) -->
+    <script>
+      /**
+       * Vanguard Compliance OS - Client-Side Engine
+       * Architecture: Modern Vanilla JS ES6 + LocalStorage Reactive State
+       */
+
+      // --- STATE STORAGE KEYS ---
+      const STORAGE_KEYS = {
+        ACTIVITIES: 'vanguard_compliance_activities_v2',
+        GOAL: 'vanguard_compliance_goal_v2',
+        ANSWERS: 'vanguard_behavioral_answers_v2',
+        SCREENERS: 'vanguard_recruiter_screeners_v2'
+      };
+
+      // --- DEFAULT SEED DATA ---
+      const SAMPLE_ACTIVITIES = [
+        {
+          id: 'act-1',
+          date: getRelativeDate(0), // Today
+          company: 'Stripe',
+          position: 'Senior Infrastructure Engineer',
+          location: 'Remote (US)',
+          method: 'Direct Company Portal',
+          status: 'Interviewing',
+          isCompliance: true,
+          notes: 'Requisition #ENG-9942. Completed initial recruiter screen with Sarah Jenkins; scheduling technical deep dive.'
+        },
+        {
+          id: 'act-2',
+          date: getRelativeDate(-1), // Yesterday
+          company: 'Datadog',
+          position: 'Staff Systems Architect',
+          location: 'Hybrid - New York, NY',
+          method: 'Direct Referral / Network',
+          status: 'Applied',
+          isCompliance: true,
+          notes: 'Referred by former principal teammate Alex Rivera. Confirmed submission in portal.'
+        },
+        {
+          id: 'act-3',
+          date: getRelativeDate(-3), // This week
+          company: 'Cloudflare',
+          position: 'Senior Backend Engineer (Edge Compute)',
+          location: 'Remote',
+          method: 'Direct Company Portal',
+          status: 'Applied',
+          isCompliance: true,
+          notes: 'Cover letter highlighting eBPF and distributed caching experience. Automated confirmation received.'
+        },
+        {
+          id: 'act-4',
+          date: getRelativeDate(-8), // Last week
+          company: 'Vercel',
+          position: 'Senior Developer Platform Engineer',
+          location: 'Remote',
+          method: 'LinkedIn / Easy Apply',
+          status: 'Applied',
+          isCompliance: true,
+          notes: 'Standard application submission for Edge Middleware team.'
+        },
+        {
+          id: 'act-5',
+          date: getRelativeDate(-10), // Last week
+          company: 'Figma',
+          position: 'Systems Reliability Engineer',
+          location: 'San Francisco, CA',
+          method: 'Technical Interview / Screen',
+          status: 'Interviewing',
+          isCompliance: true,
+          notes: '1-hour system architecture screen on canvas rendering pipeline and WebSocket reliability.'
+        },
+        {
+          id: 'act-6',
+          date: getRelativeDate(-12), // Last week
+          company: 'GitHub',
+          position: 'Senior Security Operations Engineer',
+          location: 'Remote',
+          method: 'Direct Company Portal',
+          status: 'Rejected',
+          isCompliance: true,
+          notes: 'Role filled internally; recruiter sent courtesy notification.'
+        }
+      ];
+
+      const SAMPLE_ANSWERS = [
+        {
+          id: 'ans-1',
+          title: 'Distributed Transaction Outage under BFCM Load',
+          origin: 'When our payment gateway experienced intermittent 504 timeouts under an unexpected 3.2x traffic spike during Black Friday,',
+          methodology: 'I isolated database connection pool starvation using distributed tracing, then rapidly deployed an asynchronous Redis idempotency buffer with circuit-breaking fallbacks,',
+          result: 'reducing P99 checkout latency by 44%, completely restoring transaction throughput, and safeguarding an estimated $1.4M in peak holiday volume.',
+          dateSaved: getRelativeDate(-2)
+        },
+        {
+          id: 'ans-2',
+          title: 'Legacy Monolith Database Migration with Zero Downtime',
+          origin: 'When our monolithic PostgreSQL database neared its IOPS saturation limit threatening total platform unavailability,',
+          methodology: 'I designed a dual-write CDC replication pipeline with shadow verification and automated backfill reconciliation scripts,',
+          result: 'migrating 180M active user records to partitioned microservice stores with zero downtime and cutting monthly infrastructure spend by 28%.'
+        }
+      ];
+
+      const SCREENER_CRITERIA_CONFIG = [
+        {
+          id: 'sc-1',
+          title: 'Direct Client vs. Vague 3rd-Party Broker',
+          desc: 'Recruiter explicitly names the end client upfront with verifiable domain instead of vague "Fortune 500 client".',
+          weight: 25,
+          defaultChecked: true
+        },
+        {
+          id: 'sc-2',
+          title: 'Clear Compensation Range Provided Upfront',
+          desc: 'Transparent base salary and equity parameters provided without dodging behind "DOE" or demanding current paystubs.',
+          weight: 25,
+          defaultChecked: true
+        },
+        {
+          id: 'sc-3',
+          title: 'Free from "Pay a Career Coach / Resume Fee" Schemes',
+          desc: 'Legitimate corporate engagement with zero requirements to buy courses, certifications, or resume overhauls.',
+          weight: 25,
+          defaultChecked: true
+        },
+        {
+          id: 'sc-4',
+          title: 'Detailed Engineering Tech Stack & Team Scope',
+          desc: 'Recruiter can articulate the engineering team structure, hiring manager title, and day-to-day architecture stack.',
+          weight: 15,
+          defaultChecked: true
+        },
+        {
+          id: 'sc-5',
+          title: 'Professional Communication (No Telegram/WhatsApp)',
+          desc: 'All communications conducted via company corporate email or LinkedIn InMail rather than untraceable messaging apps.',
+          weight: 10,
+          defaultChecked: true
+        }
+      ];
+
+      // --- APPLICATION GLOBAL STATE ---
+      let activities = [];
+      let weeklyGoal = 5;
+      let behavioralAnswers = [];
+      let currentViewMode = 'table'; // 'table' or 'grid'
+      let currentMainTab = 'activities';
+      let exportFormat = 'md'; // 'md' or 'csv'
+      let screenedHistory = [];
+
+      // --- DATE ENGINE: SUNDAY-TO-SATURDAY LOGIC ---
+      function getSundayToSaturdayWeek(targetDate) {
+        const d = new Date(targetDate);
+        const day = d.getDay(); // 0 is Sunday, 6 is Saturday
+        
+        // Calculate Sunday of this week
+        const sunday = new Date(d);
+        sunday.setDate(d.getDate() - day);
+        sunday.setHours(0, 0, 0, 0);
+
+        // Calculate Saturday of this week
+        const saturday = new Date(sunday);
+        saturday.setDate(sunday.getDate() + 6);
+        saturday.setHours(23, 59, 59, 999);
+
+        return { sunday, saturday };
+      }
+
+      function formatShortDate(dateObj) {
+        return dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      }
+
+      function formatFullDate(dateObj) {
+        return dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
+      function getRelativeDate(offsetDays) {
+        const d = new Date();
+        d.setDate(d.getDate() + offsetDays);
+        return d.toISOString().split('T')[0];
+      }
+
+      function isDateInWeek(dateStr, sunday, saturday) {
+        // Date strings are in YYYY-MM-DD
+        const parts = dateStr.split('-');
+        const itemDate = new Date(parts[0], parts[1] - 1, parts[2]);
+        itemDate.setHours(12, 0, 0, 0);
+        return itemDate >= sunday && itemDate <= saturday;
+      }
+
+      // --- INITIALIZATION ---
+      window.addEventListener('DOMContentLoaded', () => {
+        loadState();
+        initScreenerCriteria();
+        renderDashboard();
+        renderActivities();
+        renderBehavioralAnswers();
+        renderScreenerScore();
+        lucide.createIcons();
+
+        // Restrict date input to today or past
+        const todayStr = new Date().toISOString().split('T')[0];
+        document.getElementById('formDate').max = todayStr;
+      });
+
+      // --- STATE PERSISTENCE ---
+      function loadState() {
+        try {
+          const storedActivities = localStorage.getItem(STORAGE_KEYS.ACTIVITIES);
+          activities = storedActivities ? JSON.parse(storedActivities) : [...SAMPLE_ACTIVITIES];
+
+          const storedGoal = localStorage.getItem(STORAGE_KEYS.GOAL);
+          weeklyGoal = storedGoal ? parseInt(storedGoal, 10) : 5;
+
+          const storedAnswers = localStorage.getItem(STORAGE_KEYS.ANSWERS);
+          behavioralAnswers = storedAnswers ? JSON.parse(storedAnswers) : [...SAMPLE_ANSWERS];
+
+          const storedScreeners = localStorage.getItem(STORAGE_KEYS.SCREENERS);
+          screenedHistory = storedScreeners ? JSON.parse(storedScreeners) : [];
+
+          // Save seed if first visit
+          if (!storedActivities) saveActivities();
+          if (!storedGoal) localStorage.setItem(STORAGE_KEYS.GOAL, weeklyGoal.toString());
+          if (!storedAnswers) saveAnswers();
+        } catch (e) {
+          console.error('Failed to load local storage state:', e);
+          activities = [...SAMPLE_ACTIVITIES];
+          weeklyGoal = 5;
+          behavioralAnswers = [...SAMPLE_ANSWERS];
+        }
+      }
+
+      function saveActivities() {
+        localStorage.setItem(STORAGE_KEYS.ACTIVITIES, JSON.stringify(activities));
+      }
+
+      function saveAnswers() {
+        localStorage.setItem(STORAGE_KEYS.ANSWERS, JSON.stringify(behavioralAnswers));
+      }
+
+      function saveScreeners() {
+        localStorage.setItem(STORAGE_KEYS.SCREENERS, JSON.stringify(screenedHistory));
+      }
+
+      // --- DASHBOARD & COMPLIANCE ENGINE RENDER ---
+      function renderDashboard() {
+        const now = new Date();
+        const { sunday, saturday } = getSundayToSaturdayWeek(now);
+
+        // Update Week header range
+        const weekText = `${formatShortDate(sunday)} – ${formatShortDate(saturday)}, ${saturday.getFullYear()}`;
+        document.getElementById('currentWeekRangeText').textContent = weekText;
+
+        // Days remaining until Saturday midnight
+        const daysLeft = 6 - now.getDay();
+        const daysLeftLabel = daysLeft === 0 ? 'Today is final submission cutoff!' : `${daysLeft} day${daysLeft > 1 ? 's' : ''} left`;
+        document.getElementById('cycleDaysLeft').textContent = daysLeftLabel;
+
+        // Count current week compliance activities
+        const thisWeekCompliantActs = activities.filter(a => a.isCompliance && isDateInWeek(a.date, sunday, saturday));
+        const count = thisWeekCompliantActs.length;
+
+        document.getElementById('completedThisWeek').textContent = count;
+        document.getElementById('weeklyGoalDisplay').textContent = weeklyGoal;
+        document.getElementById('btnGoalVal').textContent = weeklyGoal;
+
+        // Calculate progress percentage
+        const percent = Math.min(100, Math.round((count / weeklyGoal) * 100));
+        document.getElementById('gaugePercent').textContent = `${percent}%`;
+
+        // SVG Circle dash calculation
+        // stroke-dasharray is circumference = 100
+        // dashoffset = 100 - percent
+        const gaugeCircle = document.getElementById('gaugeCircle');
+        const dashOffset = 100 - percent;
+        gaugeCircle.setAttribute('stroke-dashoffset', dashOffset);
+
+        if (percent >= 100) {
+          gaugeCircle.classList.remove('text-cyan-400', 'text-amber-400');
+          gaugeCircle.classList.add('text-emerald-400');
+        } else {
+          gaugeCircle.classList.remove('text-emerald-400');
+          gaugeCircle.classList.add('text-cyan-400');
+        }
+
+        // Compliance Verdict Badge
+        const badgeContainer = document.getElementById('complianceBadgeContainer');
+        const hintText = document.getElementById('complianceHint');
+
+        if (count >= weeklyGoal) {
+          badgeContainer.innerHTML = `
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold font-mono bg-emerald-950 text-emerald-300 border border-emerald-500/50 flex items-center gap-1.5 shadow-cyber-emerald">
+              <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+              AUDIT COMPLIANT
+            </span>
+          `;
+          hintText.textContent = `Goal reached (${count}/${weeklyGoal}). You are fully covered for this weekly cycle.`;
+          hintText.className = "text-[11px] text-emerald-400/90 mt-1 leading-snug";
+        } else {
+          const needed = weeklyGoal - count;
+          badgeContainer.innerHTML = `
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold font-mono bg-amber-950/80 text-amber-300 border border-amber-500/40 flex items-center gap-1.5">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400"></i>
+              IN PROGRESS (${count}/${weeklyGoal})
+            </span>
+          `;
+          hintText.textContent = `Log ${needed} more verified job search activit${needed > 1 ? 'ies' : 'y'} by Saturday night.`;
+          hintText.className = "text-[11px] text-amber-400/90 mt-1 leading-snug";
+        }
+
+        renderPastWeeksLedger(sunday);
+        lucide.createIcons();
+      }
+
+      // Past 4 weeks historical performance
+      function renderPastWeeksLedger(currentSunday) {
+        const listContainer = document.getElementById('pastWeeksList');
+        listContainer.innerHTML = '';
+
+        for (let i = 1; i <= 3; i++) {
+          const pastSunday = new Date(currentSunday);
+          pastSunday.setDate(currentSunday.getDate() - (7 * i));
+          const pastSaturday = new Date(pastSunday);
+          pastSaturday.setDate(pastSunday.getDate() + 6);
+          pastSaturday.setHours(23, 59, 59, 999);
+
+          const weekActivities = activities.filter(a => a.isCompliance && isDateInWeek(a.date, pastSunday, pastSaturday));
+          const count = weekActivities.length;
+          const met = count >= weeklyGoal;
+
+          const row = document.createElement('div');
+          row.className = "flex items-center justify-between p-2 rounded-xl bg-obsidian-950/70 border border-slate-800/80 hover:border-slate-700 transition text-xs";
+          row.innerHTML = `
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 rounded-full ${met ? 'bg-emerald-400' : 'bg-rose-400'}"></div>
+              <div>
+                <span class="font-medium text-slate-200">${formatShortDate(pastSunday)} – ${formatShortDate(pastSaturday)}</span>
+                <span class="text-[10px] text-slate-500 block">${i} week${i > 1 ? 's' : ''} ago</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 font-mono">
+              <span class="text-slate-300">${count}/${weeklyGoal}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${met ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/30' : 'bg-rose-950 text-rose-300 border border-rose-500/30'}">
+                ${met ? 'MET' : 'UNMET'}
+              </span>
+            </div>
+          `;
+          listContainer.appendChild(row);
+        }
+      }
+
+      // --- ACTIVITIES CRUD & FILTER ENGINE ---
+      function handleSearchFilterChange() {
+        renderActivities();
+      }
+
+      function getFilteredActivities() {
+        const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+        const complianceOnly = document.getElementById('filterComplianceOnly')?.checked || false;
+        const statusFilter = document.getElementById('filterStatus')?.value || 'ALL';
+        const timeframe = document.getElementById('filterTimeframe')?.value || 'ALL';
+
+        const now = new Date();
+        const { sunday: curSun, saturday: curSat } = getSundayToSaturdayWeek(now);
+        
+        const lastSun = new Date(curSun);
+        lastSun.setDate(curSun.getDate() - 7);
+        const lastSat = new Date(lastSun);
+        lastSat.setDate(lastSun.getDate() + 6);
+        lastSat.setHours(23, 59, 59, 999);
+
+        return activities.filter(act => {
+          // Compliance filter
+          if (complianceOnly && !act.isCompliance) return false;
+
+          // Status filter
+          if (statusFilter !== 'ALL' && act.status !== statusFilter) return false;
+
+          // Timeframe filter
+          if (timeframe === 'CURRENT_WEEK' && !isDateInWeek(act.date, curSun, curSat)) return false;
+          if (timeframe === 'LAST_WEEK' && !isDateInWeek(act.date, lastSun, lastSat)) return false;
+
+          // Search query
+          if (query) {
+            const searchable = `${act.company} ${act.position} ${act.location} ${act.method} ${act.status} ${act.notes}`.toLowerCase();
+            if (!searchable.includes(query)) return false;
+          }
+
+          return true;
+        }).sort((a, b) => new Date(b.date) - new Date(a.date));
+      }
+
+      function setViewMode(mode) {
+        currentViewMode = mode;
+        const tableBtn = document.getElementById('viewModeTableBtn');
+        const gridBtn = document.getElementById('viewModeGridBtn');
+
+        if (mode === 'table') {
+          tableBtn.className = "p-1.5 rounded-lg text-cyan-400 bg-slate-800/80";
+          gridBtn.className = "p-1.5 rounded-lg text-slate-400 hover:text-slate-200";
+        } else {
+          gridBtn.className = "p-1.5 rounded-lg text-cyan-400 bg-slate-800/80";
+          tableBtn.className = "p-1.5 rounded-lg text-slate-400 hover:text-slate-200";
+        }
+
+        renderActivities();
+      }
+
+      function renderActivities() {
+        const container = document.getElementById('activitiesContainer');
+        const filtered = getFilteredActivities();
+        const countEl = document.getElementById('showingCountText');
+
+        if (countEl) {
+          countEl.textContent = `Showing ${filtered.length} of ${activities.length} total entries`;
+        }
+
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div class="flex flex-col items-center justify-center py-12 text-center text-slate-500 border border-dashed border-slate-800 rounded-xl">
+              <i data-lucide="inbox" class="w-10 h-10 text-slate-600 mb-2"></i>
+              <p class="text-sm font-medium text-slate-400">No matching activities found</p>
+              <p class="text-xs text-slate-600 mt-1 max-w-sm">Adjust your filters or add a new job search activity to satisfy this week's compliance quota.</p>
+              <button onclick="openActivityModal()" class="mt-4 px-3 py-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-medium hover:bg-cyan-500/30 transition">
+                + Add Activity
+              </button>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        if (currentViewMode === 'table') {
+          renderTableView(container, filtered);
+        } else {
+          renderGridView(container, filtered);
+        }
+
+        lucide.createIcons();
+      }
+
+      function getStatusBadge(status) {
+        switch (status) {
+          case 'Applied':
+            return `<span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-cyan-950/80 text-cyan-300 border border-cyan-500/30 font-mono">Applied</span>`;
+          case 'Interviewing':
+            return `<span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-indigo-950/80 text-indigo-300 border border-indigo-500/30 font-mono">Interviewing</span>`;
+          case 'Offered':
+            return `<span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-emerald-950/80 text-emerald-300 border border-emerald-500/30 font-mono">Offered 🎉</span>`;
+          case 'Rejected':
+            return `<span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-800 text-slate-400 border border-slate-700 font-mono">Rejected</span>`;
+          case 'Ghosted':
+            return `<span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-amber-950/60 text-amber-300 border border-amber-500/20 font-mono">Ghosted</span>`;
+          default:
+            return `<span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-800 text-slate-300 font-mono">${status}</span>`;
+        }
+      }
+
+      function renderTableView(container, items) {
+        let html = `
+          <div class="overflow-x-auto rounded-xl border border-slate-800/80">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="bg-obsidian-950/90 text-slate-400 font-mono text-[11px] uppercase tracking-wider border-b border-slate-800">
+                <tr>
+                  <th class="py-3 px-4 font-semibold">Date</th>
+                  <th class="py-3 px-4 font-semibold">Company &amp; Role</th>
+                  <th class="py-3 px-4 font-semibold hidden md:table-cell">Method</th>
+                  <th class="py-3 px-4 font-semibold">Status</th>
+                  <th class="py-3 px-4 font-semibold text-center">Compliance</th>
+                  <th class="py-3 px-4 font-semibold text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 bg-obsidian-900/50">
+        `;
+
+        items.forEach(act => {
+          html += `
+            <tr class="hover:bg-slate-800/40 transition group">
+              <td class="py-3.5 px-4 font-mono text-slate-300 whitespace-nowrap">
+                ${act.date}
+              </td>
+              <td class="py-3.5 px-4">
+                <div class="font-bold text-white group-hover:text-cyan-300 transition">${escapeHtml(act.company)}</div>
+                <div class="text-xs text-slate-400">${escapeHtml(act.position)} ${act.location ? `<span class="text-slate-500">· ${escapeHtml(act.location)}</span>` : ''}</div>
+                ${act.notes ? `<div class="text-[11px] text-slate-500 mt-0.5 line-clamp-1 italic">${escapeHtml(act.notes)}</div>` : ''}
+              </td>
+              <td class="py-3.5 px-4 text-slate-300 hidden md:table-cell text-xs">
+                ${escapeHtml(act.method)}
+              </td>
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                ${getStatusBadge(act.status)}
+              </td>
+              <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                <button 
+                  onclick="toggleCompliance('${act.id}')" 
+                  title="Click to toggle compliance counting"
+                  class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono transition ${act.isCompliance ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/40 hover:bg-cyan-900/50' : 'bg-slate-900 text-slate-500 border border-slate-800 hover:text-slate-300'}"
+                >
+                  <i data-lucide="${act.isCompliance ? 'shield-check' : 'shield-off'}" class="w-3 h-3 ${act.isCompliance ? 'text-cyan-400' : 'text-slate-500'}"></i>
+                  <span>${act.isCompliance ? 'Audit Count' : 'Excluded'}</span>
+                </button>
+              </td>
+              <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                <div class="flex items-center justify-end space-x-1">
+                  <button onclick="editActivity('${act.id}')" title="Edit Entry" class="p-1.5 text-slate-400 hover:text-cyan-400 hover:bg-slate-800 rounded-lg transition">
+                    <i data-lucide="edit-3" class="w-4 h-4"></i>
+                  </button>
+                  <button onclick="deleteActivity('${act.id}')" title="Delete Entry" class="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        });
+
+        html += `
+              </tbody>
+            </table>
+          </div>
+        `;
+        container.innerHTML = html;
+      }
+
+      function renderGridView(container, items) {
+        let html = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">`;
+
+        items.forEach(act => {
+          html += `
+            <div class="bg-obsidian-950/80 border border-slate-800 hover:border-cyan-500/40 rounded-xl p-4 transition shadow flex flex-col justify-between space-y-3 group">
+              <div>
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <h4 class="font-bold text-white text-base group-hover:text-cyan-300 transition">${escapeHtml(act.company)}</h4>
+                    <p class="text-xs text-slate-300 font-medium">${escapeHtml(act.position)}</p>
+                  </div>
+                  ${getStatusBadge(act.status)}
+                </div>
+
+                <div class="flex items-center gap-2 text-xs text-slate-400 mt-2 font-mono">
+                  <span>${act.date}</span>
+                  <span>·</span>
+                  <span>${escapeHtml(act.method)}</span>
+                </div>
+
+                ${act.location ? `
+                  <div class="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
+                    <i data-lucide="map-pin" class="w-3 h-3"></i>
+                    <span>${escapeHtml(act.location)}</span>
+                  </div>
+                ` : ''}
+
+                ${act.notes ? `
+                  <p class="text-xs text-slate-400 mt-2.5 p-2 bg-obsidian-900/70 border border-slate-800/60 rounded-lg italic">
+                    "${escapeHtml(act.notes)}"
+                  </p>
+                ` : ''}
+              </div>
+
+              <div class="pt-2 border-t border-slate-800/70 flex items-center justify-between text-xs">
+                <button 
+                  onclick="toggleCompliance('${act.id}')"
+                  class="flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono ${act.isCompliance ? 'bg-cyan-950 text-cyan-300 border border-cyan-500/30' : 'bg-slate-900 text-slate-500 border border-slate-800'}"
+                >
+                  <i data-lucide="${act.isCompliance ? 'check-circle' : 'circle'}" class="w-3 h-3 text-cyan-400"></i>
+                  <span>${act.isCompliance ? 'Compliant Activity' : 'Non-Count'}</span>
+                </button>
+                <div class="flex items-center gap-1">
+                  <button onclick="editActivity('${act.id}')" class="p-1 text-slate-400 hover:text-cyan-400 rounded transition">
+                    <i data-lucide="edit-3" class="w-4 h-4"></i>
+                  </button>
+                  <button onclick="deleteActivity('${act.id}')" class="p-1 text-slate-400 hover:text-rose-400 rounded transition">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        html += `</div>`;
+        container.innerHTML = html;
+      }
+
+      // --- ACTIVITY FORM SUBMIT & MODAL ---
+      function openActivityModal(editId = null) {
+        const modal = document.getElementById('activityModal');
+        const form = document.getElementById('activityForm');
+        const modalTitle = document.getElementById('modalActivityTitle');
+        const dateError = document.getElementById('formDateError');
+        dateError.classList.add('hidden');
+
+        if (editId) {
+          const item = activities.find(a => a.id === editId);
+          if (!item) return;
+          modalTitle.textContent = 'Edit Search Activity';
+          document.getElementById('activityEditId').value = item.id;
+          document.getElementById('formDate').value = item.date;
+          document.getElementById('formCompany').value = item.company;
+          document.getElementById('formPosition').value = item.position;
+          document.getElementById('formLocation').value = item.location || '';
+          document.getElementById('formMethod').value = item.method;
+          document.getElementById('formStatus').value = item.status;
+          document.getElementById('formIsCompliance').checked = item.isCompliance;
+          document.getElementById('formNotes').value = item.notes || '';
+        } else {
+          modalTitle.textContent = 'Log Job Search Activity';
+          form.reset();
+          document.getElementById('activityEditId').value = '';
+          document.getElementById('formDate').value = new Date().toISOString().split('T')[0];
+          document.getElementById('formIsCompliance').checked = true;
+        }
+
+        modal.classList.remove('hidden');
+        lucide.createIcons();
+      }
+
+      function closeActivityModal() {
+        document.getElementById('activityModal').classList.add('hidden');
+      }
+
+      function handleActivitySubmit(e) {
+        e.preventDefault();
+        const dateInput = document.getElementById('formDate').value;
+        const dateError = document.getElementById('formDateError');
+
+        // Validation: Date cannot be in the future
+        const chosenDate = new Date(dateInput);
+        const today = new Date();
+        today.setHours(23, 59, 59, 999);
+
+        if (chosenDate > today) {
+          dateError.classList.remove('hidden');
+          return;
+        }
+        dateError.classList.add('hidden');
+
+        const editId = document.getElementById('activityEditId').value;
+        const company = document.getElementById('formCompany').value.trim();
+        const position = document.getElementById('formPosition').value.trim();
+        const location = document.getElementById('formLocation').value.trim();
+        const method = document.getElementById('formMethod').value;
+        const status = document.getElementById('formStatus').value;
+        const isCompliance = document.getElementById('formIsCompliance').checked;
+        const notes = document.getElementById('formNotes').value.trim();
+
+        if (!company || !position) {
+          showToast('Company and Position are required fields.', 'warning');
+          return;
+        }
+
+        if (editId) {
+          const index = activities.findIndex(a => a.id === editId);
+          if (index !== -1) {
+            activities[index] = {
+              ...activities[index],
+              date: dateInput,
+              company,
+              position,
+              location,
+              method,
+              status,
+              isCompliance,
+              notes
+            };
+            showToast('Activity record updated successfully.', 'success');
+          }
+        } else {
+          const newEntry = {
+            id: 'act-' + Date.now(),
+            date: dateInput,
+            company,
+            position,
+            location,
+            method,
+            status,
+            isCompliance,
+            notes
+          };
+          activities.unshift(newEntry);
+          showToast('New activity logged & added to weekly audit.', 'success');
+        }
+
+        saveActivities();
+        renderDashboard();
+        renderActivities();
+        closeActivityModal();
+      }
+
+      function editActivity(id) {
+        openActivityModal(id);
+      }
+
+      function deleteActivity(id) {
+        const item = activities.find(a => a.id === id);
+        if (!item) return;
+
+        activities = activities.filter(a => a.id !== id);
+        saveActivities();
+        renderDashboard();
+        renderActivities();
+        showToast(`Deleted activity for ${item.company}.`, 'info');
+      }
+
+      function toggleCompliance(id) {
+        const item = activities.find(a => a.id === id);
+        if (!item) return;
+
+        item.isCompliance = !item.isCompliance;
+        saveActivities();
+        renderDashboard();
+        renderActivities();
+
+        const statusMsg = item.isCompliance ? 'Now counted in weekly compliance quota' : 'Excluded from weekly compliance';
+        showToast(`${item.company}: ${statusMsg}`, 'info');
+      }
+
+      // --- BEHAVIORAL INTERVIEW BUILDER ENGINE ---
+      function updateBehavioralPreview() {
+        const origin = document.getElementById('inputOrigin').value.trim();
+        const method = document.getElementById('inputMethodology').value.trim();
+        const result = document.getElementById('inputResult').value.trim();
+
+        // Update counts
+        updateTextCount('inputOrigin', 'countOrigin');
+        updateTextCount('inputMethodology', 'countMethodology');
+        updateTextCount('inputResult', 'countResult');
+
+        const previewEmpty = document.getElementById('previewEmptyState');
+        const previewContent = document.getElementById('previewContent');
+        const previewOrigin = document.getElementById('previewOrigin');
+        const previewMethod = document.getElementById('previewMethodology');
+        const previewResult = document.getElementById('previewResult');
+        const totalWordCount = document.getElementById('totalWordCount');
+
+        if (!origin && !method && !result) {
+          previewEmpty.classList.remove('hidden');
+          previewContent.classList.add('hidden');
+          totalWordCount.textContent = '0 words';
+          return;
+        }
+
+        previewEmpty.classList.add('hidden');
+        previewContent.classList.remove('hidden');
+
+        // Clean punctuation flow
+        let formattedOrigin = origin ? `${origin} ` : '';
+        let formattedMethod = method ? `${method} ` : '';
+        let formattedResult = result || '';
+
+        previewOrigin.textContent = formattedOrigin;
+        previewMethod.textContent = formattedMethod;
+        previewResult.textContent = formattedResult;
+
+        const fullText = `${origin} ${method} ${result}`.trim();
+        const words = fullText ? fullText.split(/\s+/).filter(Boolean).length : 0;
+        totalWordCount.textContent = `${words} words · ${fullText.length} chars`;
+      }
+
+      function updateTextCount(textareaId, counterId) {
+        const text = document.getElementById(textareaId).value.trim();
+        const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+        const chars = text.length;
+        document.getElementById(counterId).textContent = `${words} words · ${chars} chars`;
+      }
+
+      function copyBehavioralPreview() {
+        const origin = document.getElementById('inputOrigin').value.trim();
+        const method = document.getElementById('inputMethodology').value.trim();
+        const result = document.getElementById('inputResult').value.trim();
+        const fullStatement = `${origin} ${method} ${result}`.trim();
+
+        if (!fullStatement) {
+          showToast('Nothing to copy. Please write your narrative statement first.', 'warning');
+          return;
+        }
+
+        navigator.clipboard.writeText(fullStatement).then(() => {
+          showToast('Behavioral answer copied to clipboard!', 'success');
+        }).catch(() => {
+          showToast('Failed to copy to clipboard automatically.', 'warning');
+        });
+      }
+
+      function saveBehavioralAnswer() {
+        const origin = document.getElementById('inputOrigin').value.trim();
+        const method = document.getElementById('inputMethodology').value.trim();
+        const result = document.getElementById('inputResult').value.trim();
+        const titleInput = document.getElementById('behavioralTitle').value.trim();
+
+        if (!origin || !method || !result) {
+          showToast('Please fill out all 3 components (Origin, Methodology, Result) before saving.', 'warning');
+          return;
+        }
+
+        const title = titleInput || `Behavioral Response (${new Date().toLocaleDateString()})`;
+
+        const newAnswer = {
+          id: 'ans-' + Date.now(),
+          title,
+          origin,
+          methodology: method,
+          result,
+          dateSaved: new Date().toISOString().split('T')[0]
+        };
+
+        behavioralAnswers.unshift(newAnswer);
+        saveAnswers();
+        renderBehavioralAnswers();
+        showToast(`Saved "${title}" to your Answer Bank!`, 'success');
+      }
+
+      function renderBehavioralAnswers() {
+        const container = document.getElementById('answerBankContainer');
+        const countLabel = document.getElementById('answerBankCount');
+        if (!container) return;
+
+        countLabel.textContent = `${behavioralAnswers.length} saved`;
+
+        if (behavioralAnswers.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-6 text-slate-500 text-xs">
+              No saved answers in your repository yet.
+            </div>
+          `;
+          return;
+        }
+
+        let html = '';
+        behavioralAnswers.forEach(ans => {
+          html += `
+            <div class="p-3 rounded-xl bg-obsidian-900 border border-slate-800 hover:border-indigo-500/40 transition group space-y-2">
+              <div class="flex items-start justify-between gap-2">
+                <span class="font-bold text-white text-xs line-clamp-1 group-hover:text-indigo-300 transition">${escapeHtml(ans.title)}</span>
+                <div class="flex items-center space-x-1 flex-shrink-0">
+                  <button onclick="copySavedAnswer('${ans.id}')" title="Copy Answer" class="p-1 text-slate-400 hover:text-cyan-400 transition">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                  </button>
+                  <button onclick="loadSavedAnswerToBuilder('${ans.id}')" title="Load into Builder" class="p-1 text-slate-400 hover:text-indigo-400 transition">
+                    <i data-lucide="arrow-up-left" class="w-3.5 h-3.5"></i>
+                  </button>
+                  <button onclick="deleteSavedAnswer('${ans.id}')" title="Delete Answer" class="p-1 text-slate-400 hover:text-rose-400 transition">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </div>
+              <p class="text-[11px] text-slate-300 line-clamp-2 leading-relaxed font-sans">
+                ${escapeHtml(`${ans.origin} ${ans.methodology} ${ans.result}`)}
+              </p>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+        lucide.createIcons();
+      }
+
+      function copySavedAnswer(id) {
+        const item = behavioralAnswers.find(a => a.id === id);
+        if (!item) return;
+        const text = `${item.origin} ${item.methodology} ${item.result}`;
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('Answer copied to clipboard!', 'success');
+        });
+      }
+
+      function loadSavedAnswerToBuilder(id) {
+        const item = behavioralAnswers.find(a => a.id === id);
+        if (!item) return;
+
+        document.getElementById('behavioralTitle').value = item.title;
+        document.getElementById('inputOrigin').value = item.origin;
+        document.getElementById('inputMethodology').value = item.methodology;
+        document.getElementById('inputResult').value = item.result;
+        updateBehavioralPreview();
+        showToast(`Loaded "${item.title}" into the formula builder.`, 'info');
+      }
+
+      function deleteSavedAnswer(id) {
+        behavioralAnswers = behavioralAnswers.filter(a => a.id !== id);
+        saveAnswers();
+        renderBehavioralAnswers();
+        showToast('Answer removed from bank.', 'info');
+      }
+
+      function clearBehavioralForm() {
+        document.getElementById('behavioralTitle').value = '';
+        document.getElementById('inputOrigin').value = '';
+        document.getElementById('inputMethodology').value = '';
+        document.getElementById('inputResult').value = '';
+        updateBehavioralPreview();
+        showToast('Formula builder cleared.', 'info');
+      }
+
+      function loadSampleBehavioral() {
+        const sample = SAMPLE_ANSWERS[0];
+        document.getElementById('behavioralTitle').value = sample.title;
+        document.getElementById('inputOrigin').value = sample.origin;
+        document.getElementById('inputMethodology').value = sample.methodology;
+        document.getElementById('inputResult').value = sample.result;
+        updateBehavioralPreview();
+        showToast('Loaded production incident example.', 'info');
+      }
+
+      // --- RECRUITER SCREENER CHECKLIST ENGINE ---
+      function initScreenerCriteria() {
+        const list = document.getElementById('screenerCriteriaList');
+        if (!list) return;
+
+        let html = '';
+        SCREENER_CRITERIA_CONFIG.forEach(item => {
+          html += `
+            <div class="flex items-start gap-3 p-3 bg-obsidian-950/70 border border-slate-800 rounded-xl hover:border-slate-700 transition">
+              <input 
+                type="checkbox" 
+                id="${item.id}" 
+                ${item.defaultChecked ? 'checked' : ''} 
+                onchange="renderScreenerScore()"
+                class="mt-1 rounded bg-slate-900 border-slate-700 text-cyan-500 focus:ring-cyan-500 h-4 w-4 cursor-pointer"
+              />
+              <div class="flex-1">
+                <label for="${item.id}" class="text-xs font-semibold text-slate-200 cursor-pointer flex items-center justify-between">
+                  <span>${item.title}</span>
+                  <span class="font-mono text-[10px] text-cyan-400 bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-500/20">+${item.weight} pts</span>
+                </label>
+                <p class="text-[11px] text-slate-400 mt-0.5">${item.desc}</p>
+              </div>
+            </div>
+          `;
+        });
+        list.innerHTML = html;
+        renderScreenerHistory();
+      }
+
+      function renderScreenerScore() {
+        let totalScore = 0;
+        SCREENER_CRITERIA_CONFIG.forEach(item => {
+          const el = document.getElementById(item.id);
+          if (el && el.checked) {
+            totalScore += item.weight;
+          }
+        });
+
+        const scoreEl = document.getElementById('screenerScoreText');
+        const labelEl = document.getElementById('screenerScoreLabel');
+        const badgeEl = document.getElementById('screenerVerdictBadge');
+        const adviceEl = document.getElementById('screenerAdviceText');
+
+        scoreEl.textContent = `${totalScore}%`;
+
+        if (totalScore >= 85) {
+          scoreEl.className = 'text-4xl font-extrabold font-mono text-emerald-400';
+          labelEl.textContent = 'High-Signal Direct Lead';
+          badgeEl.className = 'px-3 py-2 rounded-xl text-xs font-bold text-center bg-emerald-950 text-emerald-300 border border-emerald-500/40 shadow-cyber-emerald';
+          badgeEl.innerHTML = `<i data-lucide="check-circle-2" class="w-3.5 h-3.5 inline mr-1 text-emerald-400"></i> Proceed Confidently`;
+          adviceEl.textContent = 'Opportunity displays transparent parameters and legitimate corporate identifiers. Verify the recruiter on LinkedIn and request a written job description with requisition ID.';
+        } else if (totalScore >= 60) {
+          scoreEl.className = 'text-4xl font-extrabold font-mono text-amber-400';
+          labelEl.textContent = 'Caution: Broker or Subcontractor';
+          badgeEl.className = 'px-3 py-2 rounded-xl text-xs font-bold text-center bg-amber-950 text-amber-300 border border-amber-500/40';
+          badgeEl.innerHTML = `<i data-lucide="alert-triangle" class="w-3.5 h-3.5 inline mr-1 text-amber-400"></i> Verify Direct Representation`;
+          adviceEl.textContent = 'Likely a multi-tier staffing agency or offshore resume broker. Insist on knowing the exact end-client name before signing any Right-to-Represent (RTR) or sharing full personal details.';
+        } else {
+          scoreEl.className = 'text-4xl font-extrabold font-mono text-rose-400';
+          labelEl.textContent = 'High-Risk Lead Farm / Scam';
+          badgeEl.className = 'px-3 py-2 rounded-xl text-xs font-bold text-center bg-rose-950 text-rose-300 border border-rose-500/40';
+          badgeEl.innerHTML = `<i data-lucide="shield-x" class="w-3.5 h-3.5 inline mr-1 text-rose-400"></i> Reject or Disengage`;
+          adviceEl.textContent = 'Multiple red flags detected (unsolicited pitch, zero pay transparency, or third-party fee solicitation). Do not give SSN, driver license, or pay any career coaching fees.';
+        }
+
+        lucide.createIcons();
+      }
+
+      function resetScreenerChecklist() {
+        SCREENER_CRITERIA_CONFIG.forEach(item => {
+          const el = document.getElementById(item.id);
+          if (el) el.checked = item.defaultChecked;
+        });
+        document.getElementById('screenerAgencyName').value = '';
+        document.getElementById('screenerChannel').value = '';
+        document.getElementById('screenerNotes').value = '';
+        renderScreenerScore();
+        showToast('Screener checklist reset.', 'info');
+      }
+
+      function saveScreenerEvaluation() {
+        const agency = document.getElementById('screenerAgencyName').value.trim() || 'Unspecified Recruiter';
+        const channel = document.getElementById('screenerChannel').value.trim() || 'InMail';
+        const notes = document.getElementById('screenerNotes').value.trim();
+
+        let score = 0;
+        SCREENER_CRITERIA_CONFIG.forEach(item => {
+          const el = document.getElementById(item.id);
+          if (el && el.checked) score += item.weight;
+        });
+
+        const entry = {
+          id: 'scr-' + Date.now(),
+          agency,
+          channel,
+          score,
+          date: new Date().toLocaleDateString(),
+          notes
+        };
+
+        screenedHistory.unshift(entry);
+        saveScreeners();
+        renderScreenerHistory();
+        showToast(`Logged screening report for ${agency} (${score}%)`, 'success');
+      }
+
+      function renderScreenerHistory() {
+        const container = document.getElementById('screenedHistoryList');
+        const countLabel = document.getElementById('screenedCount');
+        if (!container) return;
+
+        countLabel.textContent = `${screenedHistory.length} logged`;
+
+        if (screenedHistory.length === 0) {
+          container.innerHTML = `<div class="text-slate-500 text-[11px] text-center py-3">No recruiter evaluations logged yet.</div>`;
+          return;
+        }
+
+        let html = '';
+        screenedHistory.slice(0, 5).forEach(sc => {
+          const colorClass = sc.score >= 80 ? 'text-emerald-400' : (sc.score >= 60 ? 'text-amber-400' : 'text-rose-400');
+          html += `
+            <div class="p-2 bg-obsidian-900 border border-slate-800 rounded-lg flex items-center justify-between text-xs">
+              <div>
+                <span class="font-semibold text-slate-200">${escapeHtml(sc.agency)}</span>
+                <span class="text-[10px] text-slate-500 block">${sc.channel} · ${sc.date}</span>
+              </div>
+              <span class="font-mono font-bold ${colorClass}">${sc.score}%</span>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      }
+
+      // --- COMPLIANCE AUDIT EXPORT ENGINE ---
+      function openExportModal() {
+        document.getElementById('exportModal').classList.remove('hidden');
+        renderExportPreview();
+        lucide.createIcons();
+      }
+
+      function closeExportModal() {
+        document.getElementById('exportModal').classList.add('hidden');
+      }
+
+      function setExportFormat(fmt) {
+        exportFormat = fmt;
+        const mdBtn = document.getElementById('exportFormatMDBtn');
+        const csvBtn = document.getElementById('exportFormatCSVBtn');
+
+        if (fmt === 'md') {
+          mdBtn.className = "px-2.5 py-1 rounded text-cyan-400 bg-slate-800 font-medium";
+          csvBtn.className = "px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium";
+        } else {
+          csvBtn.className = "px-2.5 py-1 rounded text-cyan-400 bg-slate-800 font-medium";
+          mdBtn.className = "px-2.5 py-1 rounded text-slate-400 hover:text-slate-200 font-medium";
+        }
+
+        renderExportPreview();
+      }
+
+      function renderExportPreview() {
+        const weekFilter = document.getElementById('exportWeekSelect').value;
+        const previewBox = document.getElementById('exportPreviewText');
+        const badge = document.getElementById('exportCountBadge');
+
+        const now = new Date();
+        const { sunday, saturday } = getSundayToSaturdayWeek(now);
+
+        let targetActivities = activities.filter(a => a.isCompliance);
+
+        if (weekFilter === 'CURRENT') {
+          targetActivities = targetActivities.filter(a => isDateInWeek(a.date, sunday, saturday));
+        }
+
+        targetActivities.sort((a, b) => new Date(b.date) - new Date(a.date));
+        badge.textContent = `${targetActivities.length} compliance activities`;
+
+        if (exportFormat === 'md') {
+          previewBox.value = generateMarkdownExport(targetActivities, weekFilter, sunday, saturday);
+        } else {
+          previewBox.value = generateCSVExport(targetActivities);
+        }
+      }
+
+      function generateMarkdownExport(items, weekFilter, sunday, saturday) {
+        const dateRange = weekFilter === 'CURRENT'
+          ? `${formatFullDate(sunday)} to ${formatFullDate(saturday)}`
+          : 'All Recorded Cycles to Date';
+
+        let md = `# UNEMPLOYMENT WORK SEARCH AUDIT RECORD\n`;
+        md += `Reporting Period: ${dateRange}\n`;
+        md += `Weekly Mandated Goal: ${weeklyGoal} verified activities\n`;
+        md += `Total Documented Activities: ${items.length}\n`;
+        md += `Compliance Status: ${items.length >= weeklyGoal ? 'COMPLIANT (QUOTA MET)' : 'IN PROGRESS / PENDING'}\n\n`;
+
+        md += `| Date | Employer / Company | Position Title | Application Method | Status | Work Search Verification Notes |\n`;
+        md += `|---|---|---|---|---|---|\n`;
+
+        items.forEach(a => {
+          const notesClean = (a.notes || 'Submitted through verified channel').replace(/\|/g, '-');
+          md += `| ${a.date} | ${a.company} | ${a.position} | ${a.method} | ${a.status} | ${notesClean} |\n`;
+        });
+
+        md += `\n---\n`;
+        md += `**Claimant Work Search Certification Statement:**\n`;
+        md += `"I hereby certify under penalty of perjury that the above documented job search contacts are bona fide applications and communications conducted for the specified reporting period."\n`;
+        md += `Generated via Vanguard Compliance Engine · Timestamp: ${new Date().toISOString()}\n`;
+
+        return md;
+      }
+
+      function generateCSVExport(items) {
+        let csv = `Date,Company,Position,Location,Method,Status,ComplianceVerified,Notes\n`;
+        items.forEach(a => {
+          const row = [
+            `"${a.date}"`,
+            `"${(a.company || '').replace(/"/g, '""')}"`,
+            `"${(a.position || '').replace(/"/g, '""')}"`,
+            `"${(a.location || '').replace(/"/g, '""')}"`,
+            `"${(a.method || '').replace(/"/g, '""')}"`,
+            `"${(a.status || '').replace(/"/g, '""')}"`,
+            `"${a.isCompliance ? 'YES' : 'NO'}"`,
+            `"${(a.notes || '').replace(/"/g, '""')}"`
+          ];
+          csv += row.join(',') + '\n';
+        });
+        return csv;
+      }
+
+      function copyExportToClipboard() {
+        const text = document.getElementById('exportPreviewText').value;
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('Audit record copied to clipboard!', 'success');
+        });
+      }
+
+      function downloadExportFile() {
+        const text = document.getElementById('exportPreviewText').value;
+        const filename = exportFormat === 'md' ? `unemployment-audit-${new Date().toISOString().split('T')[0]}.md` : `unemployment-audit-${new Date().toISOString().split('T')[0]}.csv`;
+        const blob = new Blob([text], { type: exportFormat === 'md' ? 'text/markdown' : 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast(`Downloaded ${filename}`, 'success');
+      }
+
+      function copyCurrentWeekMarkdown() {
+        const now = new Date();
+        const { sunday, saturday } = getSundayToSaturdayWeek(now);
+        const thisWeek = activities.filter(a => a.isCompliance && isDateInWeek(a.date, sunday, saturday));
+        const md = generateMarkdownExport(thisWeek, 'CURRENT', sunday, saturday);
+        navigator.clipboard.writeText(md).then(() => {
+          showToast(`Copied ${thisWeek.length} activities for current week to clipboard!`, 'success');
+        });
+      }
+
+      function downloadCurrentWeekCSV() {
+        const now = new Date();
+        const { sunday, saturday } = getSundayToSaturdayWeek(now);
+        const thisWeek = activities.filter(a => a.isCompliance && isDateInWeek(a.date, sunday, saturday));
+        const csv = generateCSVExport(thisWeek);
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `weekly-unemployment-log-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast(`Downloaded CSV for current week!`, 'success');
+      }
+
+      // --- SETTINGS & GOAL MODAL ---
+      function openSettingsModal() {
+        document.getElementById('goalSlider').value = weeklyGoal;
+        document.getElementById('goalNumberInput').value = weeklyGoal;
+        document.getElementById('settingsModal').classList.remove('hidden');
+        lucide.createIcons();
+      }
+
+      function closeSettingsModal() {
+        document.getElementById('settingsModal').classList.add('hidden');
+      }
+
+      function promptEditGoal() {
+        openSettingsModal();
+      }
+
+      function saveComplianceSettings() {
+        const val = parseInt(document.getElementById('goalNumberInput').value, 10);
+        if (val >= 1 && val <= 15) {
+          weeklyGoal = val;
+          localStorage.setItem(STORAGE_KEYS.GOAL, weeklyGoal.toString());
+          renderDashboard();
+          closeSettingsModal();
+          showToast(`Weekly compliance goal updated to ${weeklyGoal} activities/week.`, 'success');
+        } else {
+          showToast('Please specify a valid weekly goal between 1 and 15.', 'warning');
+        }
+      }
+
+      function restoreSampleDataPrompt() {
+        activities = [...SAMPLE_ACTIVITIES];
+        weeklyGoal = 5;
+        behavioralAnswers = [...SAMPLE_ANSWERS];
+        saveActivities();
+        saveAnswers();
+        localStorage.setItem(STORAGE_KEYS.GOAL, '5');
+        renderDashboard();
+        renderActivities();
+        renderBehavioralAnswers();
+        closeSettingsModal();
+        showToast('Restored rich sample tech job search & interview data.', 'success');
+      }
+
+      function clearAllDataPrompt() {
+        activities = [];
+        behavioralAnswers = [];
+        screenedHistory = [];
+        saveActivities();
+        saveAnswers();
+        saveScreeners();
+        renderDashboard();
+        renderActivities();
+        renderBehavioralAnswers();
+        renderScreenerHistory();
+        closeSettingsModal();
+        showToast('All local logs and answers have been cleared.', 'info');
+      }
+
+      // --- NAVIGATION SWITCHER ---
+      function switchMainTab(tab) {
+        currentMainTab = tab;
+        const viewActs = document.getElementById('viewActivities');
+        const viewInt = document.getElementById('viewInterview');
+        const viewScr = document.getElementById('viewScreener');
+
+        const btnActs = document.getElementById('tabBtnActivities');
+        const btnInt = document.getElementById('tabBtnInterview');
+        const btnScr = document.getElementById('tabBtnScreener');
+
+        // Hide all
+        viewActs.classList.add('hidden');
+        viewInt.classList.add('hidden');
+        viewScr.classList.add('hidden');
+
+        // Reset tab styles
+        [btnActs, btnInt, btnScr].forEach(btn => {
+          btn.className = "tab-btn px-3 py-1.5 rounded-lg font-medium text-xs sm:text-sm text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition flex items-center gap-1.5";
+        });
+
+        if (tab === 'activities') {
+          viewActs.classList.remove('hidden');
+          btnActs.className = "tab-btn px-3 py-1.5 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 bg-cyan-500/15 text-cyan-300 border border-cyan-500/30";
+        } else if (tab === 'interview') {
+          viewInt.classList.remove('hidden');
+          btnInt.className = "tab-btn px-3 py-1.5 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 bg-indigo-500/15 text-indigo-300 border border-indigo-500/30";
+          updateBehavioralPreview();
+        } else if (tab === 'screener') {
+          viewScr.classList.remove('hidden');
+          btnScr.className = "tab-btn px-3 py-1.5 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 bg-amber-500/15 text-amber-300 border border-amber-500/30";
+          renderScreenerScore();
+        }
+
+        lucide.createIcons();
+      }
+
+      // --- INLINE CYBER-CHIC TOAST ENGINE ---
+      function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-xl border backdrop-blur-md shadow-2xl text-xs sm:text-sm font-medium transition-all duration-300 transform translate-y-4 opacity-0`;
+
+        let icon = 'info';
+        let style = 'bg-obsidian-950/90 border-slate-700 text-slate-200';
+
+        if (type === 'success') {
+          icon = 'check-circle';
+          style = 'bg-obsidian-950/95 border-emerald-500/40 text-emerald-300 shadow-cyber-emerald';
+        } else if (type === 'warning') {
+          icon = 'alert-triangle';
+          style = 'bg-obsidian-950/95 border-amber-500/40 text-amber-300';
+        } else if (type === 'danger') {
+          icon = 'alert-circle';
+          style = 'bg-obsidian-950/95 border-rose-500/40 text-rose-300';
+        } else {
+          icon = 'info';
+          style = 'bg-obsidian-950/95 border-cyan-500/40 text-cyan-300 shadow-cyber-cyan';
+        }
+
+        toast.className += ` ${style}`;
+        toast.innerHTML = `
+          <i data-lucide="${icon}" class="w-4 h-4 flex-shrink-0"></i>
+          <span>${escapeHtml(message)}</span>
+        `;
+
+        container.appendChild(toast);
+        lucide.createIcons();
+
+        // Animate entrance
+        requestAnimationFrame(() => {
+          toast.classList.remove('translate-y-4', 'opacity-0');
+        });
+
+        // Auto remove
+        setTimeout(() => {
+          toast.classList.add('translate-y-4', 'opacity-0');
+          setTimeout(() => toast.remove(), 300);
+        }, 3600);
+      }
+
+      // Safe HTML escaping helper
+      function escapeHtml(str) {
+        if (!str) return '';
+        return str
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "Job Search & Unemployment Compliance Companion",
+  "description": "A modern cyber-chic dashboard to track job search activities, guarantee weekly unemployment compliance, craft behavioral interview answers, and screen agency recruiters.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
